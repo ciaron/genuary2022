@@ -1,7 +1,7 @@
 // 03 Space
 
 let stars = [];
-let nstars=1000;
+let nstars = 1000;
 
 function setup() {
   createCanvas(1000, 1000);
@@ -14,8 +14,7 @@ function setup() {
 
 function draw() {
   background(0);
-
-  push();
+  //push();
   translate(width/2, height/2);
   //console.log(stars);
 
@@ -23,17 +22,21 @@ function draw() {
     stars[i].show();
     stars[i].update();
   }
-  pop();
+  //pop();
   //noLoop();
 
 }
 
+function update() {
+
+}
 class Star {
   constructor(x, y) {
     this.pos = createVector(x, y);
     // this.vel = createVector(1, -1);
     this.vel = p5.Vector.random2D();
     this.vel.mult(random(3));
+    this.acc = createVector(random(-0.01,0.01), random(-0.01, 0.01));
   }
 
   update() {
@@ -41,18 +44,19 @@ class Star {
     //this.acc = p5.Vector.sub(mouse, this.pos);
     //this.acc.setMag(1);
 
-    //this.vel.add(this.acc);
+    this.vel.add(this.acc);
     this.vel.limit(5);
 
     this.pos.add(this.vel);
   }
 
   show() {
-    let centre = createVector(0,0);
-
+    //stroke(255);
+    //strokeWeight(2);
     noStroke();
-    fill(255);
-    let sz = map(this.pos.dist(centre), 0, 1.414*width, 0, 64);
+    //let fl = map(this.pos.dist(createVector(0,0)), 0, width, 64, 255);
+    //fill(255, fl);
+    let sz = map(this.pos.dist(createVector(0,0)), 0, width, 0, 64);
     ellipse(this.pos.x, this.pos.y, sz);
   }
 }
