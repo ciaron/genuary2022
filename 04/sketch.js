@@ -2,9 +2,9 @@
 
 // With help from Coding Train - Perlin Noise Flowfield.
 
-let step=10;
+let step=20;
 //let noiseScale=0.02;
-let inc = 0.025;
+let inc = 0.0095;
 
 var cols, rows;
 var flowfield;
@@ -82,7 +82,7 @@ function drawCurve(x, y) {
     for (let n=0; n<num_steps; n++) {
 
       curveVertex(x, y);
-      ellipse(x,y,4,4);
+      //ellipse(x,y,4,4);
 
       x_offset = x - left_x;
       y_offset = y - top_y;
@@ -90,14 +90,15 @@ function drawCurve(x, y) {
       var col = int(x_offset / step);
       var row = int(y_offset / step);
       var index = col + row*cols;
+      var step_length = 10;
 
       // do bounds checking here
       if (col < cols && row < rows && col >=0 && row >= 0) {
         //console.log(x_offset, y_offset, col, row, index);
         var grid_angle = flowfield[index].heading();
 
-        var x_step = step * cos(grid_angle);
-        var y_step = step * sin(grid_angle);
+        var x_step = step_length * cos(grid_angle);
+        var y_step = step_length * sin(grid_angle);
 
         //console.log(x_step, y_step);
 
