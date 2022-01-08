@@ -2,19 +2,37 @@
 
 // With help from Coding Train - Perlin Noise Flowfield.
 
-let step=20;
+let step=10;
 //let noiseScale=0.02;
-let inc = 0.0095;
+let inc = 0.0075;
+var ncurves = 12345;
+var num_steps = 1000;
+var step_length = 1;
 
 var cols, rows;
 var flowfield;
 
+var left_x;
+var right_x;
+var top_y;
+var bottom_y;
+
+// show the flow field vectors
+var showfield=false;
+
 function setup() {
   createCanvas(1000, 1000);
-  //rectMode(CENTER);
+
+  var factor=0.5;
+  left_x = int(width * (-1+factor));
+  right_x = int(width * (1+factor));
+  top_y = int(height *  (-1+factor));
+  bottom_y = int(height * (1 + factor)); 
+  
   noStroke();
-  cols = floor(width / step);
-  rows = floor(height / step);
+
+  cols = (right_x - left_x) / step;
+  rows = (bottom_y - top_y) / step;
 
   flowfield = new Array(cols * rows);
 }
@@ -27,7 +45,6 @@ function draw() {
   let yoff=0;
 
   for (y=0; y<rows; y++){
-
     let xoff=0; 
     for (x=0; x<cols; x++) {
       var index = x + y*cols;
@@ -35,30 +52,25 @@ function draw() {
       var v = p5.Vector.fromAngle(angle);
       v.setMag(1);
       flowfield[index] = v;
+  
+      if (showfield) {
+        push();
+        translate(x*step, y*step);
+        rotate(v.heading());
+        stroke(0, 50);
+        line(0,0,step,0);
+        pop();
+      }
 
-      //let f=random(255);
-      //let f = noise(xoff, yoff);
-      //fill(f*255);
-      //rect(x,y,step,step);
-      
-      push();
-      translate(x*step, y*step);
-
-      //stroke(0);
-      //ellipse(0, 0, 2,2);
-
-      rotate(v.heading());
-      stroke(0, 50);
-      line(0,0,step,0);
-      pop();
       xoff += inc;
     }
     yoff += inc;
   }
 
-  drawCurve(500,100);
-  drawCurve(250,750);
-  drawCurve(50,640);
+  for (n=0; n<ncurves; n++) {
+    drawCurve(random(right_x - left_x), random(bottom_y - top_y));
+  }
+
   noLoop();
 
 }
@@ -66,15 +78,9 @@ function draw() {
 function drawCurve(x, y) {
     // draw curves through the flowfield, as https://tylerxhobbs.com/essays/2020/flow-fields
 
-    // starting point
-    //var x = 500;
-    //var y = 100;
-    var num_steps=100;
-
-    var left_x = 0;
-    var top_y = 0;
-
-    stroke(255,0,0);
+    stroke(0,64);
+    strokeWeight(2);
+    strokeCap(SQUARE);
     noFill();
 
     beginShape();
@@ -82,15 +88,13 @@ function drawCurve(x, y) {
     for (let n=0; n<num_steps; n++) {
 
       curveVertex(x, y);
-      //ellipse(x,y,4,4);
-
+      
       x_offset = x - left_x;
       y_offset = y - top_y;
 
       var col = int(x_offset / step);
       var row = int(y_offset / step);
       var index = col + row*cols;
-      var step_length = 10;
 
       // do bounds checking here
       if (col < cols && row < rows && col >=0 && row >= 0) {
