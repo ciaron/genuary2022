@@ -2,13 +2,13 @@
 
 // With help from Coding Train - Perlin Noise Flowfield.
 
-let step=10;
+let step=20;
 //let noiseScale=0.02;
-let inc = 0.0075;
-var ncurves = 12345;
-var num_steps = 1000;
-var step_length = 1;
-var opacity=32;
+let inc = 0.025;
+var ncurves = 7500;
+var num_steps = 500;
+var step_length = 3;
+var opacity=64;
 
 var cols, rows;
 var flowfield;
@@ -44,12 +44,16 @@ function draw() {
   // set up and draw the flowfield
 
   let yoff=0;
+  noiseDetail(4);
 
   for (y=0; y<rows; y++){
     let xoff=0; 
     for (x=0; x<cols; x++) {
       var index = x + y*cols;
-      var angle = 2*(1-noise(xoff, yoff)) * TWO_PI;
+
+      //var angle = 2*(1-noise(xoff, yoff)) * TWO_PI;
+      var angle = map(noise(xoff, yoff), 0, 1, 0, TWO_PI);
+
       var v = p5.Vector.fromAngle(angle);
       v.setMag(1);
       flowfield[index] = v;
@@ -58,7 +62,7 @@ function draw() {
         push();
         translate(x*step, y*step);
         rotate(v.heading());
-        stroke(0, 50);
+        stroke(255,0,0,50);
         line(0,0,step,0);
         pop();
       }
