@@ -8,6 +8,7 @@ let inc = 0.0075;
 var ncurves = 12345;
 var num_steps = 1000;
 var step_length = 1;
+var opacity=32;
 
 var cols, rows;
 var flowfield;
@@ -78,7 +79,7 @@ function draw() {
 function drawCurve(x, y) {
     // draw curves through the flowfield, as https://tylerxhobbs.com/essays/2020/flow-fields
 
-    stroke(0,64);
+    stroke(0,opacity);
     strokeWeight(2);
     strokeCap(SQUARE);
     noFill();
@@ -98,7 +99,6 @@ function drawCurve(x, y) {
 
       // do bounds checking here
       if (col < cols && row < rows && col >=0 && row >= 0) {
-        //console.log(x_offset, y_offset, col, row, index);
         var grid_angle = flowfield[index].heading();
 
         var x_step = step_length * cos(grid_angle);
